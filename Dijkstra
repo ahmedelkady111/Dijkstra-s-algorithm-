@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<pii> vii;
+
+int main()
+{
+    cin.tie(0);
+    cin.sync_with_stdio(0);
+
+    int n, m, src, dest;     cin >> n >> m >> src >> dest;
+    vector<vii> edges(n+9);
+
+    ///Construct the graph
+        for(int i=0;i<m;i++)
+        {
+            int a, b, w;    cin >> a >> b >> w;
+            edges[a].push_back({b, w});          ///<Neighbor, edgeCost>
+
+        }
+
+        ///Dijkstra
+        vi cost(n+9, -1);
+        set<pii> s;
+        s.insert({0, src});           ///<totalCost, node>
+
+        while(!s.empty())
+        {
+            pii p = *(s.begin());   s.erase(p);
+            int node = p.second, nodeCost = p.first;
+            if(cost[node] != -1) continue;
+
+            cost[node] = nodeCost;
+            for(pii edge: edges[node]) {
+            if(cost[edge.first] == -1)
+            {
+                s.insert({nodeCost+edge.second, edge.first});
+            }}
+        }
+
+        if(cost[dest] == -1)    cout<<"unreachable\n";
+        else                    cout<< cost[dest];
+
+    return 0;
+    }
